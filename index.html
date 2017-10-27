@@ -8,25 +8,39 @@
   </head>
 
   <script>
-    const loadIntoDiv = function(id, file){
-      targetDiv = document.getElementById("bmtarget");
+    const bmtarget = "bmtarget"
+    const tstarget = "tstarget"
+    const loadFile = function(file, cb){
       const xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-          const response = this.responseText;
-            
-          let replaced = response.replace(/\x20/g, "&nbsp;");
-          replaced = replaced.replace(/\s/g, "<br>\r\n");
-          targetDiv.innerHTML = replaced;
+          cb(this.responseText);
         }
-      };
+      }
       xhttp.open("GET", file, true);
       xhttp.send();
     }
 
-    const batman = "standing";
+    const displayBatman = function(batman){
+      loadFile("bm/" + batman, function(response) {
+        const targetDiv = document.getElementById(bmtarget);
+        let replaced = response.replace(/\x20/g, "&nbsp;");
+        replaced = replaced.replace(/\s/g, "<br>\r\n");
+        targetDiv.innerHTML = replaced;
+      });
+    }
+
     window.onload = function() {
-      loadIntoDiv("bmtarget", "bm/" + batman)
+      loadFile("present", function(response) {
+        if (response.includes("notin")) {
+          const targetDiv = document.getElementById(bmtarget);
+          targetDiv.innerHTML = "not in!";
+        } else {
+          displayBatman("standing");
+          const targetDiv = document.getElementById(tstarget);
+          targetDiv.innerHTML = response;
+        }
+      });
     }
   </script>
   <style>
@@ -37,5 +51,6 @@
 
   <body>
     <div id="bmtarget"></div>
+    <div id="tstarget"></div>
   </body>
 </html>
