@@ -10,14 +10,17 @@
   <script>
     const bmtarget = "bmtarget"
     const tstarget = "tstarget"
-    const loadFile = function(file, cb){
+    const loadFile = function(file, cb, nocache=False){
       const xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
           cb(this.responseText);
         }
       }
-      xhttp.open("GET", file + "?" + new Date(), true);
+      if (nocache) {
+        file += + "?" + new Date();
+      }
+      xhttp.open("GET", file, true);
       xhttp.send();
     }
 
@@ -40,7 +43,7 @@
           const targetDiv = document.getElementById(tstarget);
           targetDiv.innerHTML = response;
         }
-      });
+      }, true);
     }
   </script>
   <style>
