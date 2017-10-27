@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>zgc</title>
+  </head>
+
+  <script>
+    const loadIntoDiv = function(id, file){
+      targetDiv = document.getElementById("bmtarget");
+      const xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          const response = this.responseText;
+            
+          let replaced = response.replace(/\x20/g, "&nbsp;");
+          replaced = replaced.replace(/\s/g, "<br>\r\n");
+          targetDiv.innerHTML = replaced;
+        }
+      };
+      xhttp.open("GET", file, true);
+      xhttp.send();
+    }
+
+    const batman = "standing";
+    window.onload = function() {
+      loadIntoDiv("bmtarget", "bm/" + batman)
+    }
+  </script>
+  <style>
+    body {
+      font-family: monospace;
+    }
+  </style>
+
+  <body>
+    <div id="bmtarget"></div>
+  </body>
+</html>
